@@ -1,6 +1,6 @@
 <?php
 
-namespace Api\Controller;
+namespace App\Controller;
 
 use App\Model;
 use App\Storage\DataStorage;
@@ -23,15 +23,28 @@ class ProjectController
 
     /**
      * @param Request $request
-     * 
+     *
+     * @return Response
+     * @Route("/", name="index", method="GET")
+     */
+    public function indexAction(Request $request): Response
+    {
+
+        return new Response('there');
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
      * @Route("/project/{id}", name="project", method="GET")
      */
-    public function projectAction(Request $request)
+    public function projectAction(Request $request): Response
     {
         try {
             $project = $this->storage->getProjectById($request->get('id'));
 
-            return new Response($project->toJson());
+            return new Response($project->jsonSerialize());
         } catch (Model\NotFoundException $e) {
             return new Response('Not found', 404);
         } catch (\Throwable $e) {
@@ -42,9 +55,29 @@ class ProjectController
     /**
      * @param Request $request
      *
+     * @return Response
+     * @Route("/project", name="project", method="POST")
+     */
+    public function projectCreateAction(Request $request): Response
+    {
+        try {
+            $project = $this->storage->createProject($request->request->get('title'));
+
+            return new Response($project->jsonSerialize());
+        } catch (Model\NotFoundException $e) {
+            return new Response('Not found', 404);
+        } catch (\Throwable $e) {
+            return new Response('Something went wrong', 500);
+        }
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
      * @Route("/project/{id}/tasks", name="project-tasks", method="GET")
      */
-    public function projectTaskPagerAction(Request $request)
+    public function projectTaskPagerAction(Request $request): Response
     {
         $tasks = $this->storage->getTasksByProjectId(
             $request->get('id'),
@@ -58,11 +91,13 @@ class ProjectController
     /**
      * @param Request $request
      *
+     * @return JsonResponse
+     * @throws Model\NotFoundException
      * @Route("/project/{id}/tasks", name="project-create-task", method="PUT")
      */
-    public function projectCreateTaskAction(Request $request)
+    public function projectCreateTaskAction(Request $request): JsonResponse
     {
-		$project = $this->storage->getProjectById($request->get('id'));
+		$project = $this->storage->getProjectById($request->request->get('id'));
 		if (!$project) {
 			return new JsonResponse(['error' => 'Not found']);
 		}

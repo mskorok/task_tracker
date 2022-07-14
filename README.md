@@ -1,6 +1,6 @@
 # REST API for managing project and tasks
 
-The API to manage project ans tasks in Database
+The API to manage project and tasks in Database
 
 Notices: In this test code review task we assume, that there is already some authentication middleware layer. 
 So all routes protected by some token-based authorization, etc

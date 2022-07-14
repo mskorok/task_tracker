@@ -2,31 +2,80 @@
 
 namespace App\Model;
 
-class Project
+class Project implements \JsonSerializable
 {
     /**
-     * @var array
+     * @var int
      */
-    public $_data;
+    protected $id;
+
+    /**
+     * @var string
+     */
+    protected $title;
+
+    /**
+     * @var string
+     */
+    protected $createdAt;
     
     public function __construct($data)
     {
-        $this->_data = $data;
+        $this->id = $data->id;
+        $this->title = $data->title;
+        $this->createdAt = $data->created_at;
     }
 
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
-        return (int) $this->_data['id'];
+        return (int) $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     /**
      * @return string
      */
-    public function toJson()
+    public function getTitle(): string
     {
-        return json_encode($this->_data);
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle(string $title): void
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param mixed $createdAt
+     */
+    public function setCreatedAt($createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function jsonSerialize()
+    {
+        return json_encode(get_object_vars($this));
     }
 }
