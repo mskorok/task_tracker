@@ -14,7 +14,7 @@ class DataStorage
 
     public function __construct()
     {
-        $this->pdo = new PDO('mysql:dbname=task_tracker;host=localhost', 'root', 'mike999');
+        $this->pdo = new PDO('mysql:dbname=task_tracker;host=localhost', 'root', 'password');
     }
 
 

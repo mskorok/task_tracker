@@ -37,30 +37,6 @@ class ProjectController extends AbstractController
      */
     public function indexAction(Request $request): Response
     {
-
-        return new Response('there');
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     * @Route("/test", name="test", methods={"GET"})
-     */
-    public function testAction(Request $request): Response
-    {
-
-        return new Response('test');
-    }
-
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     * @Route("/projects", name="projects", methods={"GET"})
-     */
-    public function projectsAction(Request $request): Response
-    {
         $projects = $this->storage->getProjects();
 
         return new JsonResponse($projects);
