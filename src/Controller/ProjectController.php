@@ -61,8 +61,9 @@ class ProjectController extends AbstractController
      */
     public function projectsAction(Request $request): Response
     {
+        $projects = $this->storage->getProjects();
 
-        return new Response('projects');
+        return new JsonResponse($projects);
     }
 
     /**
@@ -88,7 +89,7 @@ class ProjectController extends AbstractController
      * @param Request $request
      *
      * @return Response
-     * @Route("/project", name="project", methods={"POST"})
+     * @Route("/project", name="create-project", methods={"POST"})
      */
     public function projectCreateAction(Request $request): Response
     {
@@ -117,7 +118,22 @@ class ProjectController extends AbstractController
             $request->get('offset')
         );
 
-        return new Response(json_encode($tasks));
+        return new JsonResponse($tasks);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return JsonResponse
+     * @Route("/project/create", name="project-create", methods={"POST"})
+     */
+    public function projectCreate(Request $request): JsonResponse
+    {
+        $title = $request->request->get('title');
+
+        return new JsonResponse(
+            $this->storage->createProject($title)
+        );
     }
 
     /**
@@ -125,17 +141,17 @@ class ProjectController extends AbstractController
      *
      * @return JsonResponse
      * @throws Model\NotFoundException
-     * @Route("/project/{id}/tasks", name="project-create-task", methods={"PUT"})
+     * @Route("/project/{id}/tasks", name="project-create-task", methods={"POST"})
      */
     public function projectCreateTaskAction(Request $request): JsonResponse
     {
-		$project = $this->storage->getProjectById($request->request->get('id'));
+		$project = $this->storage->getProjectById($request->get('id'));
 		if (!$project) {
 			return new JsonResponse(['error' => 'Not found']);
 		}
-		
+
 		return new JsonResponse(
-			$this->storage->createTask($_REQUEST, $project->getId())
+			$this->storage->createTask($request->request->all(), $project->getId())
 		);
     }
 }

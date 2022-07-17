@@ -17,6 +17,23 @@ class DataStorage
         $this->pdo = new PDO('mysql:dbname=task_tracker;host=localhost', 'root', 'mike999');
     }
 
+
+    /**
+     * @return array
+     */
+    public function getProjects(): array
+    {
+        $stmt = $this->pdo->query('SELECT * FROM `project`');
+        $projects = [];
+
+        while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
+
+            $projects[] = $row;
+        }
+
+        return $projects;
+    }
+
     /**
      * @param int $projectId
      * @return Model\Project
@@ -54,8 +71,8 @@ class DataStorage
         $stmt->execute();
 
         $tasks = [];
-        foreach ($stmt->fetchObject() as $row) {
-            $tasks[] = new Model\Task($row);
+        while ($row = $stmt->fetch(PDO::FETCH_OBJ)) {
+            $tasks[] = $row;
         }
 
         return $tasks;
@@ -63,24 +80,24 @@ class DataStorage
 
     /**
      * @param string $title
-     * @return Model\Project
+     * @return object
      */
-    public function createProject(string $title): Model\Project
+    public function createProject(string $title): object
     {
         $data = new \stdClass();
         $data->title = $title;
         $this->pdo->query("INSERT INTO `project` (`title`) VALUES ('{$title}')");
         $data->id = (int) $this->pdo->query('SELECT MAX(id) FROM task')->fetchColumn();
 
-        return new Model\Project($data);
+        return $data;
     }
 
     /**
      * @param array $data
      * @param int $projectId
-     * @return Model\Task
+     * @return mixed
      */
-    public function createTask(array $data, int $projectId): Model\Task
+    public function createTask(array $data, int $projectId)
     {
         $data['project_id'] = $projectId;
 
@@ -89,9 +106,9 @@ class DataStorage
             return is_string($v) ? '"' . $v . '"' : $v;
         }, $data));
 
-        $this->pdo->query("INSERT INTO task ($fields) VALUES ($values)");
+        $this->pdo->query("INSERT INTO task ({$fields}) VALUES ({$values})");
         $data['id'] = $this->pdo->query('SELECT MAX(id) FROM task')->fetchColumn();
 
-        return new Model\Task((object) $data);
+        return $data;
     }
 }
