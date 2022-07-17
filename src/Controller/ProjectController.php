@@ -4,12 +4,20 @@ namespace App\Controller;
 
 use App\Model;
 use App\Storage\DataStorage;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ProjectController 
+/**
+ * Project controller
+ *
+ * @Route("/")
+ *
+ */
+class ProjectController extends AbstractController
 {
     /**
      * @var DataStorage
@@ -25,7 +33,7 @@ class ProjectController
      * @param Request $request
      *
      * @return Response
-     * @Route("/", name="index", method="GET")
+     * @Route("/", name="index", methods={"GET"})
      */
     public function indexAction(Request $request): Response
     {
@@ -37,7 +45,31 @@ class ProjectController
      * @param Request $request
      *
      * @return Response
-     * @Route("/project/{id}", name="project", method="GET")
+     * @Route("/test", name="test", methods={"GET"})
+     */
+    public function testAction(Request $request): Response
+    {
+
+        return new Response('test');
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     * @Route("/projects", name="projects", methods={"GET"})
+     */
+    public function projectsAction(Request $request): Response
+    {
+
+        return new Response('projects');
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return Response
+     * @Route("/project/{id}", name="project", methods={"GET"})
      */
     public function projectAction(Request $request): Response
     {
@@ -56,7 +88,7 @@ class ProjectController
      * @param Request $request
      *
      * @return Response
-     * @Route("/project", name="project", method="POST")
+     * @Route("/project", name="project", methods={"POST"})
      */
     public function projectCreateAction(Request $request): Response
     {
@@ -75,7 +107,7 @@ class ProjectController
      * @param Request $request
      *
      * @return Response
-     * @Route("/project/{id}/tasks", name="project-tasks", method="GET")
+     * @Route("/project/{id}/tasks", name="project-tasks", methods={"GET"})
      */
     public function projectTaskPagerAction(Request $request): Response
     {
@@ -93,7 +125,7 @@ class ProjectController
      *
      * @return JsonResponse
      * @throws Model\NotFoundException
-     * @Route("/project/{id}/tasks", name="project-create-task", method="PUT")
+     * @Route("/project/{id}/tasks", name="project-create-task", methods={"PUT"})
      */
     public function projectCreateTaskAction(Request $request): JsonResponse
     {

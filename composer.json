@@ -4,17 +4,27 @@
     "license": "proprietary",
     "require": {
         "php": "^7.2",
-        "symfony/http-foundation": "5.2",
-        "symfony/routing": "5.2",
-        "ext-json": "^1.6",
+        "symfony/http-foundation": "^5.2",
+        "symfony/routing": "^5.2",
+        "ext-json": "*",
         "ext-pdo": "*",
-        "symfony/dependency-injection": "5.2",
-        "symfony/config": "5.2",
-        "symfony/framework-bundle": "5.2"
+        "symfony/dependency-injection": "^5.2",
+        "symfony/config": "^5.2",
+        "symfony/framework-bundle": "^5.2",
+        "symfony/console": "^5.2",
+        "symfony/debug": "^4.4",
+        "symfony/runtime": "^5.2",
+        "symfony/yaml": "^5.4",
+        "sensio/framework-extra-bundle": "^6.2"
     },
     "autoload": {
         "psr-4": {
             "App\\": "src/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "symfony/runtime": true
         }
     }
 }
